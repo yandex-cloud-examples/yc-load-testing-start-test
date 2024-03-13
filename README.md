@@ -81,6 +81,49 @@ yc loadtesting test create \
     --test-data name=$TEST_PAYLOAD_FILE_IN_CONFIG,s3bucket=$S3_PAYLOAD_BUCKET,s3file=$S3_PAYLOAD_FILENAME
 ```
 
+### 4.2 Start test using first available agent
+
+Sometimes, you may want to run a test on the first available agent or on a subset of agents. 
+You can specify the agent selection option with the `agent-by-filter` option.
+In the following example, we create a multitest. The first part will run on the first available agent, and the second part will run on any agent with the label `key=value1` or `key=value2`
+
+```bash
+export ANY_AGENT_SELECTOR=""
+export SPECIFIC_AGENT_SELECTOR="labels.key IN (value1, value2)"
+
+yc loadtesting test create \
+    --name "yc-examples-test" \
+    --description "Test has been created using YC" \
+    --labels source=gh,type=tutorial \
+    --configuration id=$TEST_CONFIG_ID,agent-by-filter=$ANY_AGENT_SELECTOR,test-data=$TEST_PAYLOAD_FILE_IN_CONFIG \
+    --configuration id=$TEST_CONFIG_ID,agent-by-filter={$SPECIFIC_AGENT_SELECTOR},test-data=$TEST_PAYLOAD_FILE_IN_CONFIG \
+    --test-data name=$TEST_PAYLOAD_FILE_IN_CONFIG,s3bucket=$S3_PAYLOAD_BUCKET,s3file=$S3_PAYLOAD_FILENAME
+```
+
+### 4.3 Waiting for completion
+
+You can wait for the test to finish using the command `wait`
+
+```bash
+export TEST_ID='test id to wait to finish'
+
+yc loadtesting test wait $TEST_ID
+``` 
+
+Or using flag `--wait` with `test create` command.
+
+```bash
+
+yc loadtesting test create \
+    --wait \
+    --name "yc-examples-test" \
+    --description "Test has been created using YC" \
+    --labels source=gh,type=tutorial \
+    --configuration id=$TEST_CONFIG_ID,agent-id=$AGENT_ID,test-data=$TEST_PAYLOAD_FILE_IN_CONFIG \
+    --test-data name=$TEST_PAYLOAD_FILE_IN_CONFIG,s3bucket=$S3_PAYLOAD_BUCKET,s3file=$S3_PAYLOAD_FILENAME
+
+```
+
 ### (Optional) 5. Stop tests
 
 The code here will stop all running tests
