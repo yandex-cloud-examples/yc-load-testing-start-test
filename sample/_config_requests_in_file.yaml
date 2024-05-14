@@ -1,9 +1,6 @@
 autostop:
   enabled: true
   package: yandextank.plugins.Autostop
-autostop:
-  enabled: true
-  package: yandextank.plugins.Autostop
   autostop:
     - limit(40s)
 pandora:
